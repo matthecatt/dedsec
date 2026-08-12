@@ -4,6 +4,7 @@ class App {
         this.currentGame = null;
         this.hackerMode = false;
         this.hackerTerminalInput = null;
+        this.gameInstance = null;
         this.render();
         this.setupHackerMode();
     }
@@ -285,17 +286,29 @@ class App {
 
     loadGame(game) {
         const container = document.getElementById('game-container');
-        if (game === 'flappybird') new FlappyBirdGame(container);
-        else if (game === 'colormatch') new ColorMatchGame(container);
-        else if (game === 'snake') new SnakeGame(container);
-        else if (game === 'puzzle') new MemoryPuzzleGame(container);
-        else if (game === 'pong') new PongGame(container);
-        else if (game === 'clickspeed') new ClickSpeedGame(container);
-        else if (game === 'mathquiz') new MathQuizGame(container);
-        else if (game === 'tetris') new TetrisGame(container);
+        
+        // Stop any previous game
+        if (this.gameInstance && typeof this.gameInstance.stop === 'function') {
+            this.gameInstance.stop();
+        }
+        
+        if (game === 'flappybird') this.gameInstance = new FlappyBirdGame(container);
+        else if (game === 'colormatch') this.gameInstance = new ColorMatchGame(container);
+        else if (game === 'snake') this.gameInstance = new SnakeGame(container);
+        else if (game === 'puzzle') this.gameInstance = new MemoryPuzzleGame(container);
+        else if (game === 'pong') this.gameInstance = new PongGame(container);
+        else if (game === 'clickspeed') this.gameInstance = new ClickSpeedGame(container);
+        else if (game === 'mathquiz') this.gameInstance = new MathQuizGame(container);
+        else if (game === 'tetris') this.gameInstance = new TetrisGame(container);
     }
 
     backToMenu() {
+        // Stop any running game
+        if (this.gameInstance && typeof this.gameInstance.stop === 'function') {
+            this.gameInstance.stop();
+        }
+        
+        this.gameInstance = null;
         this.currentGame = null;
         this.render();
     }
