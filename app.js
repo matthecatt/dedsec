@@ -8,9 +8,7 @@ class App {
     render() {
         const app = document.getElementById('app');
         app.innerHTML = '';
-
         const currentUser = db.getCurrentUser();
-
         if (!currentUser) {
             this.renderLogin();
         } else {
@@ -50,16 +48,12 @@ class App {
         this.isLoginMode = !this.isLoginMode;
         const title = document.getElementById('auth-title');
         const emailGroup = document.getElementById('email-group');
-        const btn = document.querySelector('button');
-
         if (this.isLoginMode) {
             title.textContent = 'Login';
             emailGroup.style.display = 'none';
-            btn.textContent = 'Login';
         } else {
             title.textContent = 'Create Account';
             emailGroup.style.display = 'block';
-            btn.textContent = 'Create Account';
         }
     }
 
@@ -107,10 +101,14 @@ class App {
                 </div>
                 <h1>🎮 DedSec Games</h1>
                 <div class="menu">
-                    <button class="menu-btn" onclick="app.playGame('flappybird')">🐦 Flappy Bird</button>
-                    <button class="menu-btn" onclick="app.playGame('colormatch')">🎨 Color Match</button>
-                    <button class="menu-btn" onclick="app.playGame('snake')">🐍 Snake</button>
-                    <button class="menu-btn" onclick="app.playGame('puzzle')">🧩 Memory Puzzle</button>
+                    <button class="menu-btn" onclick="app.playGame('flappybird')"><span>🐦</span>Flappy Bird</button>
+                    <button class="menu-btn" onclick="app.playGame('colormatch')"><span>🎨</span>Color Match</button>
+                    <button class="menu-btn" onclick="app.playGame('snake')"><span>🐍</span>Snake</button>
+                    <button class="menu-btn" onclick="app.playGame('puzzle')"><span>🧩</span>Memory</button>
+                    <button class="menu-btn" onclick="app.playGame('pong')"><span>🏓</span>Pong</button>
+                    <button class="menu-btn" onclick="app.playGame('clickspeed')"><span>⚡</span>Click Speed</button>
+                    <button class="menu-btn" onclick="app.playGame('mathquiz')"><span>🧮</span>Math Quiz</button>
+                    <button class="menu-btn" onclick="app.playGame('tetris')"><span>⬜</span>Tetris</button>
                 </div>
             </div>
         `;
@@ -121,13 +119,11 @@ class App {
         const app = document.getElementById('app');
         app.innerHTML = `
             <div class="container">
-                <button onclick="app.backToMenu()" style="float: left; width: auto; padding: 8px 15px;">← Back</button>
+                <button class="back-btn" onclick="app.backToMenu()">← Back</button>
                 <h2>${this.getGameTitle(game)}</h2>
                 <div id="game-container" class="game-container"></div>
             </div>
         `;
-
-        // Load the game
         this.loadGame(game);
     }
 
@@ -136,23 +132,25 @@ class App {
             flappybird: '🐦 Flappy Bird',
             colormatch: '🎨 Color Match',
             snake: '🐍 Snake Game',
-            puzzle: '🧩 Memory Puzzle'
+            puzzle: '🧩 Memory Puzzle',
+            pong: '🏓 Pong',
+            clickspeed: '⚡ Click Speed Challenge',
+            mathquiz: '🧮 Math Quiz',
+            tetris: '⬜ Tetris'
         };
         return titles[game] || 'Game';
     }
 
     loadGame(game) {
         const container = document.getElementById('game-container');
-        
-        if (game === 'flappybird') {
-            new FlappyBirdGame(container);
-        } else if (game === 'colormatch') {
-            new ColorMatchGame(container);
-        } else if (game === 'snake') {
-            new SnakeGame(container);
-        } else if (game === 'puzzle') {
-            new MemoryPuzzleGame(container);
-        }
+        if (game === 'flappybird') new FlappyBirdGame(container);
+        else if (game === 'colormatch') new ColorMatchGame(container);
+        else if (game === 'snake') new SnakeGame(container);
+        else if (game === 'puzzle') new MemoryPuzzleGame(container);
+        else if (game === 'pong') new PongGame(container);
+        else if (game === 'clickspeed') new ClickSpeedGame(container);
+        else if (game === 'mathquiz') new MathQuizGame(container);
+        else if (game === 'tetris') new TetrisGame(container);
     }
 
     backToMenu() {
