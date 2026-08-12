@@ -2,6 +2,116 @@ class App {
     constructor() {
         this.currentPage = 'login';
         this.currentGame = null;
+        this.hackerMode = false;
+        this.render();
+        this.setupHackerMode();
+    }
+
+    setupHackerMode() {
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'H') {
+                this.activateHackerMode();
+            }
+        });
+    }
+
+    activateHackerMode() {
+        this.hackerMode = true;
+        const app = document.getElementById('app');
+        app.innerHTML = `
+            <div id="hacker-terminal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; overflow: hidden; font-family: 'Orbitron', monospace; color: #0ff; padding: 20px; box-sizing: border-box; border: 3px solid #0ff; box-shadow: 0 0 50px #0ff, inset 0 0 50px rgba(0, 255, 255, 0.2);">
+                <div style="position: absolute; top: 10px; right: 20px; font-size: 1.2em; cursor: pointer; color: #ff00ff; font-weight: bold;" onclick="app.closeHackerMode()">[ CLOSE ]</div>
+                <div style="margin-bottom: 20px; text-shadow: 0 0 10px #0ff;">
+                    <div style="font-size: 1.5em; font-weight: bold; letter-spacing: 2px;">▓▒░ DEDSEC TERMINAL ░▒▓</div>
+                    <div style="font-size: 0.9em; color: #00ff00; margin-top: 5px;">[ ACCESS LEVEL: MAXIMUM ]</div>
+                    <div style="font-size: 0.85em; color: #666; margin-top: 3px;">Type anything to execute code...</div>
+                </div>
+                <div id="terminal-output" style="height: 85%; overflow-y: auto; border: 2px solid #0ff; padding: 15px; background: rgba(0, 10, 20, 0.9); margin-bottom: 15px; box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.1);"></div>
+                <input type="text" id="terminal-input" placeholder="> " style="width: 100%; background: rgba(0, 255, 255, 0.1); border: 2px solid #0ff; color: #0ff; font-family: 'Orbitron', monospace; font-size: 1em; padding: 10px; box-sizing: border-box; text-shadow: 0 0 5px #0ff;" autofocus>
+            </div>
+        `;
+        
+        const input = document.getElementById('terminal-input');
+        const output = document.getElementById('terminal-output');
+        
+        const hackerLines = [
+            'INITIALIZING SYSTEM...',
+            'SCANNING FIREWALL...',
+            'BYPASSING SECURITY PROTOCOLS...',
+            'ACCESSING MAINFRAME...',
+            '[████████████████████] 100%',
+            'WELCOME TO DEDSEC TERMINAL',
+            ''
+        ];
+        
+        hackerLines.forEach((line, idx) => {
+            setTimeout(() => {
+                output.innerHTML += `<div style="color: #00ff00; margin: 3px 0; text-shadow: 0 0 5px #00ff00;">> ${line}</div>`;
+                output.scrollTop = output.scrollHeight;
+            }, idx * 100);
+        });
+        
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const command = input.value;
+                
+                output.innerHTML += `<div style="color: #0ff; margin: 8px 0; text-shadow: 0 0 5px #0ff;">>> ${command}</div>`;
+                
+                const codeLines = this.generateHackerCode();
+                codeLines.forEach((line, idx) => {
+                    setTimeout(() => {
+                        const newLine = document.createElement('div');
+                        newLine.textContent = line;
+                        newLine.style.color = line.includes('ERROR') || line.includes('FAIL') ? '#ff3333' : 
+                                             line.includes('SUCCESS') || line.includes('COMPLETE') ? '#00ff00' : '#0ff';
+                        newLine.style.margin = '2px 0';
+                        newLine.style.textShadow = `0 0 5px ${newLine.style.color}`;
+                        newLine.style.fontFamily = "'Orbitron', monospace";
+                        output.appendChild(newLine);
+                        output.scrollTop = output.scrollHeight;
+                    }, idx * 50);
+                });
+                
+                input.value = '';
+            }
+        });
+    }
+
+    generateHackerCode() {
+        const codeSnippets = [
+            '$ ACCESSING: 192.168.1.1',
+            '$ DECRYPTING DATABASE...',
+            '$ BYPASSING FIREWALL: SUCCESS',
+            '$ DOWNLOADING FILES... 45%',
+            '$ SCANNING NETWORK NODES...',
+            '$ EXTRACTING DATA PACKETS',
+            '$ CRACKING ENCRYPTION KEY',
+            '$ ACCESS GRANTED',
+            '$ SYSTEM COMPROMISED',
+            '$ ERASING TRACES...',
+            '$ UPLOADING VIRUS...',
+            '$ INITIALIZING PAYLOAD',
+            '$ REROUTING SIGNAL',
+            '$ CAPTURING TRAFFIC',
+            '$ MONITORING CONNECTIONS',
+            '$ PENETRATION SUCCESSFUL',
+            '$ EXECUTING PAYLOAD',
+            '$ [████████████████████] 100%',
+            '$ OPERATION COMPLETE'
+        ];
+        
+        const lineCount = Math.floor(Math.random() * 5) + 3;
+        let lines = [];
+        
+        for (let i = 0; i < lineCount; i++) {
+            lines.push(codeSnippets[Math.floor(Math.random() * codeSnippets.length)]);
+        }
+        
+        return lines;
+    }
+
+    closeHackerMode() {
+        this.hackerMode = false;
         this.render();
     }
 
